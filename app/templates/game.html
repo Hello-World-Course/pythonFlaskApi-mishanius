@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Word Chain Game</title>
+</head>
+<body>
+    <h1>Word Chain Game</h1>
+    <form method="post">
+        <input type="text" name="user_word" required>
+        <button type="submit">Submit</button>
+    </form>
+    <ul>
+        {% for word in words %}
+            <li>{{ word }}</li>
+        {% endfor %}
+    </ul>
+    <a href="TODO">Restart</a>
+</body>
+</html>
