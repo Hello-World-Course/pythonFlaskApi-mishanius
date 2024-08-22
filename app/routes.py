@@ -6,5 +6,7 @@ from flask import current_app as app, render_template
 def game():
     return render_template('game.html', words=session.get('used_words', []))
 
-
-# add restart route here
+@app.route('/restart', methods=['GET'])
+def logout():
+    session.clear()
+    return redirect(url_for('game'))

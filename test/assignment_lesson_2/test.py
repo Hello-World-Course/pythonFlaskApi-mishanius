@@ -19,7 +19,7 @@ class RoutesTests(AssignmentTester):
 
     def test_restart(self):
         response = self.client.get('/restart')
-        self.assertEqual(response.status_code, 302)  # Should redirect
+        self.assertEqual(302, response.status_code)  # Should redirect
 
 
 if __name__ == "__main__":
