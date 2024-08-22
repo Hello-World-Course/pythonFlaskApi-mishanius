@@ -1,0 +1,29 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: on pr run
+on:
+  pull_request:
+    types:
+      - closed
+jobs:
+  if_merged:
+    permissions: write-all
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create tag
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch_name = context.payload.pull_request.head.ref
+            console.log(branch_name)
+            const ref_name = `refs/tags/${branch_name}`
+            console.log(ref_name)
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: ref_name,
+              sha: context.sha
+            }) 
+      - run: echo "merged"

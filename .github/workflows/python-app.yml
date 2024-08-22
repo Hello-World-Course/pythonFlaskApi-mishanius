@@ -1,0 +1,46 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+    - name: Verify Merge
+      uses: actions/github-script@v7
+      with:
+        script: |
+          try {
+            console.log("Verifyin Ref")
+            const branch = context.payload.pull_request.head.ref
+            console.log(branch)
+            await github.rest.git.getRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'tags/' + branch
+            }) 
+            throw new Error("You already finished this lesson, change to the next lesson barnch!");
+            }
+            catch(err) {
+              if(err.status!=404){
+                console.log(err.status)
+                throw new Error("Something went wrong!");
+              }
+            }
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.10"
+    - name: Branch name
+      run: echo running on branch ${GITHUB_HEAD_REF}
+    - name: Test with unitest
+      run: |
+        python -m unittest discover -s test/${GITHUB_HEAD_REF}
